@@ -176,7 +176,7 @@ void StartTask02(void const * argument)
 	/*operating system event for receiving os events from rtos kernel*/
 	osEvent taskMessageHandler;
 	
-	/*for ever loop of this thread*/
+	/*infinite loop of this thread*/
 	for (;;)
 	{
 		osDelay(1);  /*wait 1 ms for stability*/
@@ -186,8 +186,9 @@ void StartTask02(void const * argument)
 		/*if we are here, then receive message*/
 		if (taskMessageHandler.status == osEventMessage)
 		{
-			/*receive message as char pointer*/
+			/*create task message*/
 			char* messagetoInterrupt = "[TASK]hello isr(), i received your message thank you";
+			/*receive message as char pointer*/
 			//printDebugMessage(true, "[TASK]Received Message is %s", taskMessageHandler.value.p);
 			
 			/*try to send message to isr() function*/
@@ -220,7 +221,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				this will re enable by HAL library after exit this function*/
 	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
 
-	/*creating os message*/
+	/*creating os event handler*/
 	osEvent messageHandler;
 	/*create task message*/
 	char * messagetotask = "[ISR]hello, i'm sending message to you from isr(), are u fine?";
@@ -251,7 +252,7 @@ void StartDefaultTask(void const * argument)
 	/*you can declare your variables for this task*/
 	int m_errorCount = 0;
 	
-	/*for ever loop of this thread*/
+	/*infinite loop of this thread*/
 	for (;;)
 	{
 		osDelay(1);		/*delay 1 ms for stability*/
