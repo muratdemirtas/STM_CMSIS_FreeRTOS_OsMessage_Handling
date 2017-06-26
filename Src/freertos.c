@@ -193,15 +193,20 @@ void StartTask02(void const * argument)
 			
 			/*try to send message to isr() function*/
 			if (osMessagePut(interruptMessage, (uint32_t)messagetoInterrupt, osWaitForever) != osOK)
+			{
+				/*if error, then notify us*/
 				errorCount = errorCount + 1;
-			
-			/*try to send message to another thread*/
-			if (osMessagePut(tasktoTaskMessage, (uint32_t)taskMessageHandler.value.p, osWaitForever) != osOK)
-				errorCount = errorCount + 1;
-		
-			/*if error, then notify us*/
-			else
 				printDebugMessage(true, "[TASK]Message can not send to isr(),is queue full or what?");
+			}
+				
+			/*try to send message to another thread*/
+			
+			if (osMessagePut(tasktoTaskMessage, (uint32_t)messagetoTask, osWaitForever) != osOK)
+			{
+				/*if error, then notify us*/
+				errorCount = errorCount + 1;
+				printDebugMessage(true, "[TASK]Message can not send to task(),is queue full or what?");
+			}
 			
 		}
 	}
